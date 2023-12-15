@@ -3,5 +3,4 @@
 ``` Python
 print("coming soon")
 ````
-
-![[Pasted image 20231215171836.png]]
+![Preview](file:///C:/Users/jeff/Desktop/tts_app/img/prev.png)
