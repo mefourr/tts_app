@@ -1,29 +1,55 @@
-import os
-from speechpro.cloud.speech import synthesis
-from parse_file import get_file_lines
-from make_dir import make_dir 
-
-def main() -> None:
-    lines: list = get_file_lines()
-
-    сlient: synthesis.SynthesisClient = synthesis.SynthesisClient()
-    audio: bytes = 0
-
-    dir: str = make_dir("./outputs")
-
-    make_requests(lines, сlient, dir)
-
-    os.system(f'explorer "{os.path.abspath(dir)}"')
+from ctypes import alignment
+from decimal import Rounded
+from turtle import window_height
+import flet as ft
+from flet import TextField
+from flet_core.control_event import ControlEvent
+from requests import request
 
 
-def make_requests(lines: list, сlient: synthesis.SynthesisClient, dir: str) -> None:
-    for index, line in enumerate(lines):
-        audio = сlient.synthesize(
-            synthesis.enums.Voice.CAROL, synthesis.enums.PlaybackProfile.SPEAKER, line
+def main(page: ft.Page) -> None:
+    page.title = "TTS App"
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.theme_mode = "Dark"
+
+    page.window_height = 200
+    page.window_width = 400
+
+    file_path = TextField(
+        hint_text="path/to/srt/file",
+        text_align=ft.TextAlign.CENTER,
+        width=200,
+        opacity=50,
+        border_radius=50,
+        border_color="white",
+    )
+
+    def btn_click(e: ControlEvent):
+        if not file_path.value:
+            file_path.error_text = "enter the path"
+            page.update()
+        else:
+            go_request(path=file_path.value)
+
+    page.add(
+        ft.Row(
+            [
+                ft.ElevatedButton(
+                    "Launch",
+                    on_click=btn_click,
+                    width=100,
+                    height=55,
+                ),
+                file_path,
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
         )
-        with open(f"{dir}/{index}_output.wav", "wb") as f:
-            f.write(audio)
+    )
 
 
-if __name__ == "__main__":
-    main()
+def go_request(path: str) -> None:
+    request(path=path)
+
+
+if "__main__" == __name__:
+    ft.app(target=main)
