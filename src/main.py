@@ -1,4 +1,5 @@
 import os
+import re
 from speechpro.cloud.speech import synthesis
 from parse_file import get_file_lines
 
@@ -9,19 +10,25 @@ def main():
     сlient = synthesis.SynthesisClient()
     audio: bytes = 0
 
-    make_dir()
+    dir: str = make_dir('./outputs')
+    
+    make_requests(lines, сlient, dir)
 
+    os.system(f'explorer "{os.path.abspath(dir)}"')
+
+
+def make_requests(lines, сlient, dir):
     for index, line in enumerate(lines):
         audio = сlient.synthesize(
             synthesis.enums.Voice.CAROL, synthesis.enums.PlaybackProfile.SPEAKER, line
         )
-        with open(f"./outputs/{index}_output.wav", "wb") as f:
+        with open(f"{dir}/{index}_output.wav", "wb") as f:
             f.write(audio)
 
 
-def make_dir():
-    output_directory = "./outputs"
-    is_dir_exists(output_directory)
+def make_dir(output_dir: str) -> str:
+    is_dir_exists(output_dir)
+    return output_dir
 
 
 def is_dir_exists(output_directory) -> None:
