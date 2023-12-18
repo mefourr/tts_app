@@ -8,9 +8,8 @@ from flet_core.control_event import ControlEvent
 
 def request(*, path: str) -> None:
     lines: list = get_file_lines(path=path)
-    
+
     сlient: synthesis.SynthesisClient = synthesis.SynthesisClient()
-    audio: bytes = 0
 
     dir: str = make_dir("./outputs")
 
